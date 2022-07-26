@@ -1,2 +1,2 @@
 # laravel
-A Simple E commerce applicatoin
+A Simple E commerce application
