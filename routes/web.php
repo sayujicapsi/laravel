@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/categories',[CategoryController::class,'index'])->name('category.list');
 Route::get('/categories/add',[CategoryController::class,'create'])->name('category.add');

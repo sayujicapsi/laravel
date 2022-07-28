@@ -16,7 +16,7 @@ php artisan migrate
 php artisan db:seed
 
 
-For running the project in the local environment, lease run the  following commands in the root directory of the project folder
+For running the project in the local environment, please run the  following commands in the root directory of the project folder
 
 php artisan serve
 
