@@ -8,8 +8,11 @@ For installing this project in the local environment, please run the  following 
 
 
 composer install
+
 npm install && npm run dev
+
 php artisan migrate
+
 php artisan db:seed
 
 
