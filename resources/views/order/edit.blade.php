@@ -133,6 +133,7 @@
 		      if($("#error_div").hasClass('d-none')){
 		      	$("#error_div").removeClass('d-none');
 		      }
+		      $("#error_ul").html("");
 		      $.each(err.responseJSON.errors,function(key,value){
 		      		console.log(value[0]);
 		      		console.log(key);
