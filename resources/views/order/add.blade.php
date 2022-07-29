@@ -76,12 +76,10 @@
 <script>
 	var i = 1;
 	function add(){
-
-
 		i = i+1;
 		$(".add-field").append(
 				`
-				<div class="form-group">
+				<div class="form-group" id="item_product_form${i}">
 				  <label for="product_id">Product</label>
 				  <select  class="form-control" name="product_id[]" id="product_id${i}">
 				  	@foreach($products as $product)
@@ -89,13 +87,24 @@
 				  	@endforeach
 				  </select>
 				</div>
-				<div class="form-group">
+				<div style="margin-bottom:20px;" class="form-group" id="item_quantity_form${i}">
 				    <label for="quantity">Quantity</label>
 				    <input type="number" name="quantity[]" class="form-control" value="" >
-				  </div> <br> `
+				  </div> 
+				  <a style="margin-bottom:40px;" onclick="remove_item(${i})" id="remove_item${i}" class="btn btn-danger">Remove Item</a>
+				  
+				   `
 
 
 			);
+	}
+
+	function remove_item(key){
+
+		$("#item_product_form"+key).remove();
+		$("#item_quantity_form"+key).remove();
+		$("#remove_item"+key).remove();
+		
 	}
 
 
@@ -110,7 +119,9 @@
 			console.log(i);
 			console.log(n);
 			console.log($("#product_id"+n+" option:selected").val())
-			product_id_list.push($("#product_id"+n+ " option:selected" ).val());
+			if($("#product_id"+n+ " option:selected" ).val()){
+				product_id_list.push($("#product_id"+n+ " option:selected" ).val());	
+			}
 
 		}
 		console.log(product_id_list);

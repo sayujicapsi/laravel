@@ -102,7 +102,11 @@ class OrderController extends Controller
     		'product_id.*' => 'required',
     		'quantity.*' => 'required|integer',
     		
-    	]);
+    	],[
+             
+            'quantity.*.required' =>   "Quantity is required",
+            'quantity.*.numeric' =>   "Quantity is numeric",
+        ]);
 
     	
     	$order = Order::find($id);

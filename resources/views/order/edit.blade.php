@@ -4,6 +4,7 @@
 
 <div class="container">
 	<h2>Edit Order</h2>
+
 	<div class="row justify-content-md-center " >
 		<div class="col-md-6 alert alert-danger d-none " id="error_div">
 		   <ul id="error_ul">
@@ -18,12 +19,15 @@
 				<button onclick="add()" class="btn btn-success" style="float: right; margin-bottom: 20px;">Add item</button>
 			</div>
 		</div>
-
+		<div class="clearfix"></div>
+		<div class="col-md-6 align-items-center ">
+			<p class="alert alert-info">* Minimum one product should be in the order or else you can delete the 	order</p>
+		</div>
 		<div class="clearfix"></div>
 
 		<div class="col-md-6 align-items-center ">
 			
-			<form method="POST" action=""  >
+			<form method="POST"  >
 				  @csrf()
 				  @method('PUT')
 				  <div class="form-group">
@@ -37,20 +41,25 @@
 				  </div>
 				  <br>
 				  @foreach($order->order_detail as $key => $value)  
-					  <div class="form-group">
+					 
+					  <div class="form-group" id="item_product_form{{$key +1}}">
 					    <label for="product_id">Product</label>
+
 					    <select  class="form-control" name="product_id" id="product_id{{$key+1}}">
 					    	@foreach($products as $product)
 					    		<option  {{$product->id == $value->product_id  ? 'selected' : ''}} value="{{ $product->id }}">{{ $product->product_name }}</option>
 					    	@endforeach
 					    </select>
 					  </div>
-					  <br>
-					  <div class="form-group">
+					 
+					  <div style="margin-bottom:20px;" class="form-group" id="item_quantity_form{{$key + 1}}">
 					    <label for="quantity">Quantity</label>
 					    <input type="number" name="quantity[]" class="form-control" value="{{ $value->quantity }}" >
 					  </div>
-
+					   @if($key > 0)
+					   	<a style="margin-bottom:40px;" onclick="remove_item({{ $key +1 }})" id="remove_item{{ $key +1 }}" class="btn btn-danger">Remove Item</a>
+					   	
+					   @endif
 				  @endforeach
 
 				  <br>
@@ -73,11 +82,15 @@
 </div>
 <script>
 	var i = {{ $order->order_detail->count() }};
+
+	
+
+	
 	function add(){
 		i = i+1;
 		$(".add-field").append(
 				`
-				<div class="form-group">
+				<div class="form-group" id="item_product_form${i}">
 				  <label for="product_id">Product</label>
 				  <select  class="form-control" name="product_id[]" id="product_id${i}">
 				  	@foreach($products as $product)
@@ -85,13 +98,25 @@
 				  	@endforeach
 				  </select>
 				</div>
-				<div class="form-group">
+				<div style="margin-bottom:20px;" class="form-group" id="item_quantity_form${i}">
 				    <label for="quantity">Quantity</label>
 				    <input type="number" name="quantity[]" class="form-control" value="" >
-				  </div> <br> `
+				  </div> 
+				  <a style="margin-bottom:40px;" onclick="remove_item(${i})" id="remove_item${i}" class="btn btn-danger">Remove Item</a>
+				  
+				   `
 
 
 			);
+	}
+
+
+	function remove_item(key){
+
+		$("#item_product_form"+key).remove();
+		$("#item_quantity_form"+key).remove();
+		$("#remove_item"+key).remove();
+		
 	}
 
 
@@ -105,7 +130,10 @@
 			console.log(i);
 			console.log(n);
 			console.log($("#product_id"+n+" option:selected").val())
-			product_id_list.push($("#product_id"+n+ " option:selected" ).val());
+			if($("#product_id"+n+ " option:selected" ).val()){
+				product_id_list.push($("#product_id"+n+ " option:selected" ).val());	
+			}
+			
 
 		}
 		console.log(product_id_list);
