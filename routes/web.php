@@ -42,6 +42,7 @@ Route::get('/orders/edit/{id}',[OrderController::class,'edit'])->name('order.edi
 Route::post('/orders/store',[OrderController::class,'store'])->name('order.store');
 Route::put('/orders/update/{id}',[OrderController::class,'update'])->name('order.update');
 Route::get('/orders/delete/{id}',[OrderController::class,'destroy'])->name('order.delete');
+Route::get('/orders/restore/{id}',[OrderController::class,'restore'])->name('order.restore');
 
 
 Route::get('/pdf/{id}',[PdfController::class,'pdf'])->name('order.pdf');

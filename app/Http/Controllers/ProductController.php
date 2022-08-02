@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use DB;
 
 class ProductController extends Controller
 {
@@ -12,7 +13,13 @@ class ProductController extends Controller
 
     public function index(){
 
-    	$products = Product::with('category')->orderBy('id','desc')->get();
+    	//$products = Product::with('category')->orderBy('id','desc')->get();
+       $products = DB::table('products as p')
+                   ->join('categories as c','p.category_id','c.id')
+                   ->whereNull('c.deleted_at')
+                   ->select('p.*','c.category_name')
+                   ->get();
+        //dd($products);
     	return view('product.list',compact('products'));
     }
 
@@ -51,6 +58,14 @@ class ProductController extends Controller
     public function edit($id){
     	$product = Product::find($id);
     	$categories = Category::all();
+        $product =   DB::table('products as p')
+                    ->join('categories as c','p.category_id','c.id')
+                    ->whereNull('c.deleted_at')->where('p.id',$id)
+                    ->select('p.*','c.category_name')
+                    ->first();
+        if(empty($product)){
+            return redirect()->route('product.list');
+        }
     	return view('product.edit',compact('product','categories'));
 
     }

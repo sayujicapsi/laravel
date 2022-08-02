@@ -10,17 +10,19 @@ use Faker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use DB;
 class OrderController extends Controller
 {
     //
     public function index(){
 
-    	$orders = Order::with('customer','order_detail')->orderBy('id','desc')->get();
+    	$orders = Order::with('customer','order_detail')->orderBy('id','desc')->withTrashed()->get();
     	return view('order.list',compact('orders'));
     }
 
     public function create(){
-    	$products = Product::all();
+    	$products = Product::whereNull('deleted_at')->get();
+
     	return view('order.add',compact('products'));
 
     }
@@ -89,7 +91,7 @@ class OrderController extends Controller
 
     	$order = Order::with(['order_detail','customer'])->find($id);
     	//$customer = Customer::find($order->customer_id);
-    	$products = Product::all();
+    	$products = DB::table('products')->get();
     	return view('order.edit',compact('products','order'));
 
     }
@@ -171,6 +173,13 @@ class OrderController extends Controller
     	OrderDetail::where('order_id',$id)->delete();
     	session()->flash('order_delete','Order Deleted');
     	return redirect()->route('order.list');
+    }
+
+    public function restore($id){
+        Order::where('id',$id)->restore();
+        OrderDetail::where('order_id',$id)->restore();
+        session()->flash('order_restore','Order has been activated');
+        return redirect()->route('order.list');
     }
 
  

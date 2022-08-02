@@ -34,11 +34,11 @@
 				    <tr>
 				      <th scope="row">{{ $key+1}}</th>
 				      <td>{{ $product->product_name }}</td>
-				      <td>{{ $product->category->category_name }}</td>
+				      <td>{{ $product->category_name }}</td>
 				      <td>{{ $product->price }}</td>
 				      <td>
 				      	<a href="{{ route('product.edit',$product->id) }}" class="btn btn-warning">Edit </a>
-				      	<a href="{{ route('product.delete',$product->id) }}"  onclick="return confirm('Are you sure you want to delete this product?');" class="btn btn-danger">Delete </a>
+				      	{{-- <a href="{{ route('product.delete',$product->id) }}"  onclick="return confirm('Are you sure you want to delete this product?');" class="btn btn-danger">Delete </a> --}}
 				      </td>
 				    </tr>
 			    @endforeach

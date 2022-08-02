@@ -13,6 +13,9 @@
 	@if(Session::has('order_delete'))
 		<p class="alert alert-success" >{{ Session::get('order_delete') }} </p>
 	@endif
+	@if(Session::has('order_restore'))
+		<p class="alert alert-success" >{{ Session::get('order_restore') }} </p>
+	@endif
 	<div class="row">
 		<div class="col-md-12 pull-right">
 			<a href="{{ route('order.add') }}" class="btn btn-success " style="float:right;">Add</a>	
@@ -27,6 +30,7 @@
 			      <th scope="col">Phone </th>
 			      <th scope="col">Net Amount</th>
 			      <th scope="col">Order Date</th>
+			      <th scope="col">Status</th>
 			      <th scope="col">Actions</th>
 			     
 			    </tr>
@@ -40,11 +44,16 @@
 				      <td>{{ $order->customer->phone_number }}</td>
 				      <td>{{ $order->order_detail->where('order_id',$order->id)->sum('total_amount')  }}</td>
 				      <td>{{ date('d M Y',strtotime($order->created_at)) }}</td>
+				      <td>{{ !$order->deleted_at ? 'Active' : 'Cancelled' }}</td>
 				      <td>
-				      	<a href="{{ route('order.edit',$order->id) }}" class="btn btn-warning">Edit </a>
-				      	<a href="{{ route('order.delete',$order->id) }}"  onclick="return confirm('Are you sure you want to delete this order?');" class="btn btn-danger">Delete </a>
-				      	<a href="{{ route('order.pdf',$order->id) }}"   class="btn btn-info">Invoice </a>
+				      	@if(!$order->deleted_at)
+					      	<a href="{{ route('order.edit',$order->id) }}" class="btn btn-warning">Edit </a>
+					      	<a href="{{ route('order.delete',$order->id) }}"  onclick="return confirm('Are you sure you want to cancel this order?');" class="btn btn-danger">Cancel </a>
+					      	<a href="{{ route('order.pdf',$order->id) }}"   class="btn btn-info">Invoice </a>
+				      @else
+				      		<a href="{{ route('order.restore',$order->id) }}"   class="btn btn-success">Activate </a>
 
+				      @endif
 				      </td>
 				    </tr>
 			    @endforeach
